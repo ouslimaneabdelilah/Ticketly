@@ -1,0 +1,95 @@
+:root {
+    --color-nvf: #000F2A;
+    --background : url(/assets/img/background.jpg);
+    --color-bg-light: #09090c;
+    --color-text: #FFFFFF;
+    --color-subtext: #B0B0B0;
+    --color-primary: #3BA1FF;
+    --color-accent: #C800FF;
+    --color-stroke: #529FD2;
+    --color-bg-cart:#1A1A2E;
+    --color-btn-primary:#31D7A9;
+    --color-bg-section:#021F50;
+
+    --gradient-primary: linear-gradient(90deg, #3BA1FF 0%, #C800FF 100%);
+    --gradient-btn: linear-gradient(90deg, #00FFFF 0%, #FF00FF 100%);
+
+    --shadow-soft: 0 0 15px rgba(82, 159, 210, 0.3);
+    --shadow-strong: 0 0 25px rgba(82, 159, 210, 0.6);
+
+    --font-main: "Super Sliced";
+    --font-body: "Roboto";
+    --transition-fast: 0.3s ease-in-out;
+}
+
+@font-face {
+    font-family: "Super Sliced";
+    src: url("../assets/fonts/Super Sliced.otf");
+
+}
+
+@font-face {
+    font-family: "Roboto";
+    src: url("../assets/fonts/Roboto-Bold.ttf");
+
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-body);
+    background: var(--background);
+    background-position: center;
+    background-size: cover;
+    min-height: 100vh;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: var(--color-text);
+    line-height: 1.6;
+}
+.line-bottom{
+    border-bottom: 1px solid var(--color-stroke);
+}
+ul {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    color: var(--color-text);
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.flex-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+
+
+
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-strong);
+}
+
+@media (min-width: 1024px) {
+    .container {
+        width: 80%;
+    }
+}
