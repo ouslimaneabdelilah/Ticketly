@@ -1,0 +1,16 @@
+.hero{
+    background-color: var(--color-bg-section);
+    text-align: center;
+    padding: 4px 30px;
+    margin: 5px;
+    border-radius: 10px;
+    font-size: .8rem;
+}
+.hero-content h1{
+    text-align: center;
+    font-family: var(--font-body);
+    padding: 20px 10px;
+}
+.title_sec{
+    color: var(--color-btn-primary);
+}
