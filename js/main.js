@@ -145,8 +145,50 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       displayCards(data.cards);
+      //etape 2
+      document.addEventListener('click', (e) => {
+        if (e.target.classList.contains("reserve-btn")) {
+          const cardElement = e.target.closest(".card");
+          const cardId = cardElement.dataset.tid;
+          const selectedCard = data.cards.find(item => String(item.tid) === String(cardId));
+          if (!selectedCard) return;
+
+          state.selectedEvent = selectedCard;
+          state.qty = 1;
+          state.participants = [];
+          saveProgress();
+          populateStep2();
+          showStep(2);
+        }
+      });
+
+      const step2Title = document.getElementById('step2-event-title');
+      const step2Meta = document.getElementById('step2-event-meta');
+      const qtyInput = document.getElementById('qty-input');
+      const availablePlaces = document.getElementById('available-places');
+      document.getElementById('step2-prev').addEventListener('click', () => showStep(1));
+      document.getElementById('step2-next').addEventListener('click', () => {
+        const max = state.selectedEvent ? state.selectedEvent.remaining_places : 0;
+        const qty = Number(qtyInput.value) || 0;
+        if (qty <= 0) { alert('Choisissez au moins 1 billet'); return; }
+        if (qty > max) { alert(`Maximum disponible: ${max}`); return; }
+        state.qty = qty;
+        state.participants = [];
+        saveProgress();
+        populateParticipantsForm();
+        showStep(3);
+      });
+
+      function populateStep2() {
+        if (!state.selectedEvent) return;
+        step2Title.textContent = state.selectedEvent.title;
+        step2Meta.textContent = `${state.selectedEvent.date} • ${state.selectedEvent.location} • ${state.selectedEvent.price} ${state.selectedEvent.currency}`;
+        qtyInput.value = state.qty || 1;
+        availablePlaces.textContent = `Places disponibles: ${state.selectedEvent.remaining_places}`;
+      }
+
 
     })
-
+    
 });
 
