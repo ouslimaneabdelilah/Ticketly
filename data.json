@@ -1,0 +1,122 @@
+{
+ "hero": {
+    "title": {
+      "title_pr":"RÉSERVATION DE BILLETS POUR UN",
+      "title_sec" : "ÉVÉNEMENT"
+    },
+    "subtitle": "Réservez facilement vos billets pour vos événements préférés en quelques clics — rapide, simple et sécurisé."
+  },
+  "progress":["Événements","Billets","Participants","Récap"],
+  "cards": [
+    {
+      "tid": 1,
+      "title": "Salon Tech 2025",
+      "date": "2025-10-12",
+      "location": "Rabat",
+      "type": "Conférence",
+      "remaining_places": 200,
+      "price": 45,
+      "currency": "MAD",
+      "image": "./assets/img/card_image.jpg"
+    },
+    {
+      "tid": 2,
+      "title": "Gaming Expo 2025",
+      "date": "2025-11-02",
+      "location": "Casablanca",
+      "type": "Exposition",
+      "remaining_places": 150,
+      "price": 60,
+      "currency": "MAD",
+      "image": "/assets/img/card_image.jpg"
+    },
+    {
+      "tid": 3,
+      "title": "AI Summit Morocco",
+      "date": "2025-09-18",
+      "location": "Marrakech",
+      "type": "Conférence",
+      "remaining_places": 120,
+      "price": 80,
+      "currency": "MAD",
+      "image": "/assets/img/card_image.jpg"
+    },
+    {
+      "tid": 4,
+      "title": "Startup Weekend",
+      "date": "2025-08-05",
+      "location": "Fès",
+      "type": "Atelier",
+      "remaining_places": 90,
+      "price": 30,
+      "currency": "MAD",
+      "image": "/assets/img/card_image.jpg"
+    },
+    {
+      "tid": 5,
+      "title": "Design Connect 2025",
+      "date": "2025-09-01",
+      "location": "Agadir",
+      "type": "Conférence",
+      "remaining_places": 180,
+      "price": 50,
+      "currency": "MAD",
+      "image": "/assets/img/card_image.jpg"
+    },
+    {
+      "tid": 6,
+      "title": "Web Dev Days",
+      "date": "2025-11-20",
+      "location": "Tanger",
+      "type": "Workshop",
+      "remaining_places": 110,
+      "price": 40,
+      "currency": "MAD",
+      "image": "/assets/img/card_image.jpg"
+    },
+    {
+      "tid": 7,
+      "title": "Digital Future Expo",
+      "date": "2025-12-10",
+      "location": "Casablanca",
+      "type": "Exposition",
+      "remaining_places": 250,
+      "price": 55,
+      "currency": "MAD",
+      "image": "/assets/img/card_image.jpg"
+    },
+    {
+      "tid": 8,
+      "title": "Cloud Conference",
+      "date": "2025-10-25",
+      "location": "Rabat",
+      "type": "Conférence",
+      "remaining_places": 140,
+      "price": 65,
+      "currency": "MAD",
+      "image": "/assets/img/card_image.jpg"
+    },
+    {
+      "tid": 9,
+      "title": "Cyber Security Day",
+      "date": "2025-11-15",
+      "location": "Marrakech",
+      "type": "Séminaire",
+      "remaining_places": 100,
+      "price": 70,
+      "currency": "MAD",
+      "image": "/assets/img/card_image.jpg"
+    },
+    {
+      "tid": 10,
+      "title": "Green Tech Forum",
+      "date": "2025-12-05",
+      "location": "Fès",
+      "type": "Conférence",
+      "remaining_places": 130,
+      "price": 45,
+      "currency": "MAD",
+      "image": "/assets/img/card_image.jpg"
+    }
+  ]
+}

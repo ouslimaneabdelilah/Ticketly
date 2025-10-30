@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="/styles/style.css" />
     <link rel="stylesheet" href="/styles/footer.css" />
     <link rel="stylesheet" href="./styles/nav.css" />
-    <script src="/js/main.js"></script>
     <script src="/assets/htmx/htmx.min.js"></script>
     <script src="https://kit.fontawesome.com/237dd4ebeb.js" crossorigin="anonymous"></script>
 </head>
@@ -17,12 +16,26 @@
     <header>
         <div hx-get="/views/components/nav.html" hx-trigger="load" hx-swap="innerHTML"></div>
     </header>
-    <main class="content-with-navbar " >
+    <main class="content-with-navbar ">
         <section class="hero"></section>
+        <section class="progress">
+            <div class="btns">
+            </div>
+        </section>
+
     </main>
+
     <footer>
         <div hx-get="/views/components/footer.html" hx-trigger="load" hx-swap="innerHTML"></div>
     </footer>
+
+    <script src="/js/main.js"></script>
 </body>
 
 </html>
+
+
+
+
+
+
