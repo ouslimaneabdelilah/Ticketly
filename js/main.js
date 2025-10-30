@@ -1,11 +1,40 @@
 document.addEventListener('DOMContentLoaded', () => {
   const dataUrl = 'data.json';
+  const state = {
+    data: null,
+    currentStep: 1,
+    selectedEvent: null,
+    qty: 0,
+    participants: []
+  };
+
+  function saveProgress() {
+    localStorage.setItem('reserv_progress', JSON.stringify({
+      selectedEvent: state.selectedEvent,
+      qty: state.qty,
+      participants: state.participants,
+      currentStep: state.currentStep
+    }));
+  }
+
+  function loadProgress() {
+    
+    const raw = localStorage.getItem('reserv_progress');
+    if (!raw) return;
+    try {
+      const obj = JSON.parse(raw);
+      state.selectedEvent = obj.selectedEvent || null;
+      state.qty = obj.qty || 0;
+      state.participants = obj.participants || [];
+      state.currentStep = obj.currentStep || 1;
+    } catch (e) { console.log("error infunction loadProgress") }
+  }
 
   fetch(dataUrl)
-    .then(response => {
-      return response.json();
-    })
+    .then(r => r.json())
     .then(data => {
+      state.data = data;
+      loadProgress();
       const hero = document.querySelector('.hero');
       if (hero && data.hero) {
         hero.innerHTML = `
@@ -16,75 +45,38 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
       }
 
-      //Progress 
-      const data_progress = data.progress;
       const btns = document.querySelector(".btns");
-
-      if (data_progress) {
-        data_progress.map((e, i) => {
-          btns.innerHTML += `
-      <div class="btn-step btn-step-${i + 1}">
-        <button type="button">${i + 1} - ${e}</button>
-      </div>`;
+      if (data.progress) {
+        data.progress.forEach((label, i) => {
+          btns.innerHTML += `<div class="btn-step btn-step-${i+1}" data-step="${i+1}"><button type="button">${i+1} - ${label}</button></div>`;
         });
       }
 
-      // let currentStep = 0;
-      // const allSteps = document.querySelectorAll(".btn-step");
-      // allSteps[currentStep].classList.add("active");
+      const stepSections = Array.from(document.querySelectorAll('.step-section'));
+      function showStep(stepNum) {
+        state.currentStep = stepNum;
+        stepSections.forEach(sec => {
+          const n = Number(sec.dataset.step);
+          if (n === stepNum) sec.classList.remove('hidden'); else sec.classList.add('hidden');
+        });
+        document.querySelectorAll('.btn-step').forEach(el => {
+          if (Number(el.dataset.step) === stepNum) el.classList.add('active'); else el.classList.remove('active');
+        });
+        saveProgress();
+      }
 
-      // function updateActiveStep() {
-      //   allSteps.forEach((el) => el.classList.remove("active"));
-      //   allSteps[currentStep].classList.add("active");
-      // }
-
-      // document.getElementById("nextBtn").addEventListener("click", () => {
-      //   if (currentStep < allSteps.length - 1) {
-      //     currentStep++;
-      //     updateActiveStep();
-      //   }
-      // });
-
-      // document.getElementById("prevBtn").addEventListener("click", () => {
-      //   if (currentStep > 0) {
-      //     currentStep--;
-      //     updateActiveStep();
-      //   }
-      // });
-
-
-
-      // Filter in events
-      const filter_ele = document.querySelector(".filter");
-
-      filter_ele.innerHTML = `
-        <div class="filter-ville">
-          <select name="villes" id="ville-select">
-            <option value="">--Toutes les villes--</option>
-            ${[...new Set(data.cards.map(element => element.location))]
-          .map(location => `<option value="${location}">${location}</option>`)
-          .join("")}
-          </select>
-        </div>
-
-        <div class="filter-categories">
-          <select name="categories" id="categorie-select">
-            <option value="">--Toutes les catégories--</option>
-            ${[...new Set(data.cards.map(element => element.type))]
-          .map(type => `<option value="${type}">${type}</option>`)
-          .join("")}
-          </select>
-        </div>
-
-        <div>
-          <button id="reset-btn">Effacer</button>
-        </div>
-      `;
+      document.addEventListener('click', (e) => {
+        const b = e.target.closest('.btn-step');
+        if (b) {
+          const step = Number(b.dataset.step);
+          showStep(step);
+        }
+      });
 
       function displayCards(cards) {
         const cardsSection = document.querySelector('.cards-container');
-        if (cardsSection && Array.isArray(cards)) {
-          cardsSection.innerHTML = `
+        if (!cardsSection || !Array.isArray(cards)) return;
+        cardsSection.innerHTML = `
           <div class="cards-grid">
             ${cards.map(card => `
               <article class="card" data-tid="${card.tid}">
@@ -105,8 +97,31 @@ document.addEventListener('DOMContentLoaded', () => {
             `).join('')}
           </div>
         `;
-        }
       }
+
+      // Filter
+      const filter_ele = document.querySelector(".filter");
+      filter_ele.innerHTML = `
+        <div class="filter-ville">
+          <select name="villes" id="ville-select">
+            <option value="">--Toutes les villes--</option>
+            ${[...new Set(data.cards.map(element => element.location))]
+          .map(location => `<option value="${location}">${location}</option>`).join("")}
+          </select>
+        </div>
+
+        <div class="filter-categories">
+          <select name="categories" id="categorie-select">
+            <option value="">--Toutes les catégories--</option>
+            ${[...new Set(data.cards.map(element => element.type))]
+          .map(type => `<option value="${type}">${type}</option>`).join("")}
+          </select>
+        </div>
+
+        <div>
+          <button id="reset-btn">Effacer</button>
+        </div>
+      `;
 
       function applyFilters() {
         const selectedVille = document.querySelector("#ville-select").value;
@@ -130,24 +145,8 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       displayCards(data.cards);
-      // const reserve_click = document.querySelector(".reserve-btn");
-      document.addEventListener('click', (e) => {
-        if (e.target.classList.contains("reserve-btn")) {
-          const cardElement = e.target.closest(".card");
-          const cardId = cardElement.dataset.tid;
-          const selectedCard = data.cards.find(e => e.tid == cardId);
-          let selectedCards = JSON.parse(localStorage.getItem("selectedCards")) || "";
-          const alreadyExists = selectedCards.some(c => c.tid == selectedCard.tid);
-          if (!alreadyExists) {
-            selectedCards.push(selectedCard);
-            localStorage.setItem("selectedCards", JSON.stringify(selectedCards));
-               
-               console.log("hhhh");
-            
-          }
-        }
-      })
 
     })
+
 });
 

@@ -73,19 +73,51 @@
 
 /* Filter  */
 .filter{
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-    align-items: center;
+	width: 100%;
+	max-width: 960px;
+	margin: 0 auto 16px;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+	align-items: center;
+	justify-content: center;
+	padding: 8px;
 }
-.filter div select, #reset-btn{
-    background-color: white;
-    padding: 5px 30px;
+
+.filter select option {
+	background: #fff;
+	color: #0f172a;
+}
+
+#reset-btn {
+	background: var(--color-btn-primary);
+	border: 1px solid rgba(2,6,23,0.06);
+	color: white;
+	padding: 8px 10px;
     border-radius: 10px;
-    border: none;
+	min-width: 90px;
+	box-shadow: none;
 }
+#reset-btn:hover {
+	background: black;;
+	
+}
+
+.filter select:focus,
+.filter button:focus,
+#reset-btn:focus {
+	outline: none;
+	box-shadow: 0 8px 24px rgba(49,215,169,0.08);
+	border-color: rgba(49,215,169,0.35);
+}
+
+
+/* Cards */
 .cards-container {
-    padding: 1rem;
+	width: 100%;
+	max-width: 960px;
+	margin: 0 auto;
+	padding: 1rem 0 0 0;
 }
 
 .cards-grid {
@@ -98,7 +130,7 @@
 .card {
     display: flex;
     flex-direction: column;
-    background: var(--color-bg-light, #fff);
+    background: var(--color-btn-progress);
     border: 1px solid var(--color-stroke, #e6e6e6);
     border-radius: 10px;
     overflow: hidden;
@@ -138,8 +170,7 @@
 .card-title {
     font-size: 1.05rem;
     margin: 0;
-    color: var(--color-text, #0f172a);
-    font-weight: 600;
+ font-weight: 600;
 }
 
 .card-meta {
@@ -181,22 +212,52 @@
 }
 .reserve-btn:hover {
     transform: translateY(-2px);
-    background: color-mix(in srgb, var(--color-btn-primary, #0b74de) 85%, black 15%);
+    background: var(--color-accent);
+}
+
+.hidden { display: none !important; }
+
+
+
+.step-card,
+.step-section > div,
+.step-section .events-selection,
+.step-section form,
+#recap {
+	width: 100%;
+	max-width: 960px;
+	background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+	border: 1px solid rgba(255,255,255,0.06);
+	border-radius: 12px;
+	padding: 20px;
+	box-shadow: 0 10px 30px rgba(2,6,23,0.35);
+	box-sizing: border-box;
+	backdrop-filter: blur(6px);
+}
+.card-places{
+    color: var(--color-nvf);
+}
+
+.step-section h2,
+.step-section h3 {
+	font-size: 1.25rem;
+	margin-bottom: 6px;
+	letter-spacing: 0.2px;
+	color: var(--color-nvf);
 }
 
 
 
-
-
-
-@media (min-width: 768px) {
-    .card-img { height: 220px; }
-    .cards-grid { gap: 1.25rem; }
-    .progress {
-        padding: 1.25rem 1.5rem;
-    }
-    .btn-step button {
-        min-width: 150px;
-        padding: 12px 22px;
-    }
+.step-section select {
+	width: 100%;
+	padding: 12px 14px;
+	border-radius: 10px;
+	border: 1px solid rgba(255,255,255,0.06);
+	background: rgba(255,255,255,0.02);
+	color: var(--color-text);
+	font-size: 0.98rem;
+	transition: box-shadow .18s ease, border-color .18s ease, transform .12s ease;
+	outline: none;
 }
+
+
