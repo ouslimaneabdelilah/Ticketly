@@ -30,18 +30,36 @@
             <div class="cards-container"></div>
         </section>
         <section class="step step-2 step-section hidden" data-step="2">
-            <div class="events-selection">
+            <div>
                 <h2 id="step2-event-title">Événement sélectionné</h2>
+                <h3 class="title_event"></h3>
                 <p id="step2-event-meta"></p>
                 <form id="qty-form">
-                    <label for="qty-input">Nombre de billets</label>
-                    <input id="qty-input" type="number" min="1" value="1" />
-                    <small id="available-places"></small>
-                    <div style="margin-top:12px;">
+                    <div class="pl-prix">
+                        <small id="available-places"></small>
+                        <div id="price"><span class="num_price"></span></div>
+                    </div>
+                    <div class="quantite">
+                        
+                        <label for="qty-input">Quantité</label>
+                        <div class="qn-arrow">
+                            <i class="fa-solid fa-minus " id="minus"></i>
+                            <input id="qty-input" type="text" value="1" />
+                            <i class="fa-solid fa-plus " id="plus"></i>
+                        </div>
+                    </div>
+                    <div class="error-qtn">
+
+                    </div>
+
+                    <div class="btn-tran">
                         <button type="button" id="step2-prev">Précédent</button>
                         <button type="button" id="step2-next">Suivant</button>
                     </div>
                 </form>
+            </div>
+            <div class="img-event">
+                <img src="./assets/img/card_image.jpg" alt="">
             </div>
         </section>
 

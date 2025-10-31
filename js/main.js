@@ -1,4 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
+  function error_messages(selector, messages) {
+    document.querySelector(selector).innerHTML = messages
+  }
   const dataUrl = 'data.json';
   const state = {
     data: null,
@@ -18,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function loadProgress() {
-    
+
     const raw = localStorage.getItem('reserv_progress');
     if (!raw) return;
     try {
@@ -48,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const btns = document.querySelector(".btns");
       if (data.progress) {
         data.progress.forEach((label, i) => {
-          btns.innerHTML += `<div class="btn-step btn-step-${i+1}" data-step="${i+1}"><button type="button">${i+1} - ${label}</button></div>`;
+          btns.innerHTML += `<div class="btn-step btn-step-${i + 1}" data-step="${i + 1}"><button type="button">${i + 1} - ${label}</button></div>`;
         });
       }
 
@@ -85,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <div class="card-body">
                   <h3 class="card-title">${card.title}</h3>
-                  <p class="card-meta">${card.date} • ${card.location}</p>
+                  <p class="card-meta">${card.date} <i class="fa-solid fa-location-dot"></i> ${card.location}</p>
                   <p class="card-type">${card.type}</p>
                   <p class="card-places">Places restantes: ${card.remaining_places}</p>
                 </div>
@@ -165,13 +168,16 @@ document.addEventListener('DOMContentLoaded', () => {
       const step2Title = document.getElementById('step2-event-title');
       const step2Meta = document.getElementById('step2-event-meta');
       const qtyInput = document.getElementById('qty-input');
+      const price = document.getElementById('price');
       const availablePlaces = document.getElementById('available-places');
+      const error = document.querySelector('error-qtn');
       document.getElementById('step2-prev').addEventListener('click', () => showStep(1));
       document.getElementById('step2-next').addEventListener('click', () => {
         const max = state.selectedEvent ? state.selectedEvent.remaining_places : 0;
         const qty = Number(qtyInput.value) || 0;
-        if (qty <= 0) { alert('Choisissez au moins 1 billet'); return; }
-        if (qty > max) { alert(`Maximum disponible: ${max}`); return; }
+        if (qty > max) { 
+          error_messages(".error-qtn","Le quantite choisir n'est pas desponible")
+          ; return; }
         state.qty = qty;
         state.participants = [];
         saveProgress();
@@ -181,14 +187,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
       function populateStep2() {
         if (!state.selectedEvent) return;
+        price.innerHTML = `${state.selectedEvent.price} <span class="num_price">${state.selectedEvent.currency}</span>`
         step2Title.textContent = state.selectedEvent.title;
-        step2Meta.textContent = `${state.selectedEvent.date} • ${state.selectedEvent.location} • ${state.selectedEvent.price} ${state.selectedEvent.currency}`;
+        step2Meta.innerHTML = `${state.selectedEvent.date} <i class="fa-solid fa-location-dot"></i>  ${state.selectedEvent.location} `;
         qtyInput.value = state.qty || 1;
         availablePlaces.textContent = `Places disponibles: ${state.selectedEvent.remaining_places}`;
+
       }
 
+      let plus = document.getElementById("plus");
+      let minus = document.getElementById("minus");
+      let counter = 1;
+      if (plus) {
+        plus.addEventListener("click", () => {
+          ++counter
+          qtyInput.value = counter
+        });
+      }
+      if (minus) {
+        minus.addEventListener("click", () => {
+          if(counter <= 0){
+            counter =  0
+          }
+          else{
+            counter--;
+          }
+          qtyInput.value = counter          
+        });
+      }
+      
 
     })
-    
 });
 
