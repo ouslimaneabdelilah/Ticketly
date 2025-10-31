@@ -65,16 +65,9 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.btn-step').forEach(el => {
           if (Number(el.dataset.step) === stepNum) el.classList.add('active'); else el.classList.remove('active');
         });
+        if (stepNum === 2) populateStep2();
         saveProgress();
       }
-
-      document.addEventListener('click', (e) => {
-        const b = e.target.closest('.btn-step');
-        if (b) {
-          const step = Number(b.dataset.step);
-          showStep(step);
-        }
-      });
 
       function displayCards(cards) {
         const cardsSection = document.querySelector('.cards-container');
@@ -170,14 +163,17 @@ document.addEventListener('DOMContentLoaded', () => {
       const qtyInput = document.getElementById('qty-input');
       const price = document.getElementById('price');
       const availablePlaces = document.getElementById('available-places');
-      const error = document.querySelector('error-qtn');
+
       document.getElementById('step2-prev').addEventListener('click', () => showStep(1));
       document.getElementById('step2-next').addEventListener('click', () => {
-        const max = state.selectedEvent ? state.selectedEvent.remaining_places : 0;
-        const qty = Number(qtyInput.value) || 0;
-        if (qty > max) { 
-          error_messages(".error-qtn","Le quantite choisir n'est pas desponible")
-          ; return; }
+        const max = state.selectedEvent ? Number(state.selectedEvent.remaining_places) : 0;
+        let qty = parseInt(qtyInput.value, 10);
+        if (isNaN(qty) || qty < 1) qty = 1;
+        if (qty > max) {
+          error_messages(".error-qtn", `La quantité choisie (${qty}) dépasse les places disponibles (${max}).`);
+          return;
+        }
+        error_messages(".error-qtn", "");
         state.qty = qty;
         state.participants = [];
         saveProgress();
@@ -190,32 +186,47 @@ document.addEventListener('DOMContentLoaded', () => {
         price.innerHTML = `${state.selectedEvent.price} <span class="num_price">${state.selectedEvent.currency}</span>`
         step2Title.textContent = state.selectedEvent.title;
         step2Meta.innerHTML = `${state.selectedEvent.date} <i class="fa-solid fa-location-dot"></i>  ${state.selectedEvent.location} `;
-        qtyInput.value = state.qty || 1;
+        if (!state.qty || Number(state.qty) < 1) state.qty = 1;
+        qtyInput.value = state.qty;
         availablePlaces.textContent = `Places disponibles: ${state.selectedEvent.remaining_places}`;
 
       }
 
       let plus = document.getElementById("plus");
       let minus = document.getElementById("minus");
-      let counter = 1;
+      let counter = state.qty || 1;
+
+      function clampCounter(v) {
+        const max = state.selectedEvent ? Number(state.selectedEvent.remaining_places) : Infinity;
+        if (isNaN(v) || v < 1) return 1;
+        if (v > max) return max;
+        return v;
+      }
+
       if (plus) {
         plus.addEventListener("click", () => {
-          ++counter
-          qtyInput.value = counter
+          counter = clampCounter(counter + 1);
+          qtyInput.value = counter;
         });
       }
       if (minus) {
         minus.addEventListener("click", () => {
-          if(counter <= 0){
-            counter =  0
-          }
-          else{
-            counter--;
-          }
-          qtyInput.value = counter          
+          counter = clampCounter(counter - 1);
+          qtyInput.value = counter;
         });
       }
-      
+
+      if (qtyInput) {
+        qtyInput.addEventListener('input', () => {
+          let v = parseInt(qtyInput.value.replace(/\D/g, ''), 10);
+          if (isNaN(v)) v = 1;
+          v = clampCounter(v);
+          counter = v;
+          qtyInput.value = v;
+        });
+      }
+
+      showStep(state.currentStep);
 
     })
 });
