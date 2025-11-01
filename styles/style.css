@@ -293,6 +293,11 @@
         font-size: 0.85rem;
     color: var(--color-subtext, #6b7280);
 }
+.step-2,.step-3{
+    display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+
+}
 
 .pl-prix{
     display: flex;
@@ -328,7 +333,7 @@
     margin: 80px 0px 0px 0px;
 }
 
-#step2-prev,#step2-next{
+#step2-prev,#step2-next,#step3-prev,#step3-next{
     width: 150px;
     padding: 10px 30px;
     border-radius: 10px;
@@ -336,11 +341,11 @@
     border: 1px solid transparent;
 }
 
-#step2-prev{
+#step2-prev,#step3-prev{
     background-color: var(--color-accent);
 
 }
-#step2-next{
+#step2-next,#step3-next{
     background-color: var(--color-btn-primary);
 
 }
@@ -356,3 +361,59 @@
 #minus:hover{
     color: var(--color-accent);
 }
+
+#firstName,#lastName, #email, #phone{
+    width: 100%;
+    padding: 5px;
+    border: none;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 10px;
+    gap: 10px;
+
+}
+#ajouter_par{
+    margin-top: 10px;
+    border-radius: 10px;
+    width: 100%;
+    padding: 10px 30px;
+    border-radius: 10px;
+    background-color: var(--color-nvf);
+    color: var(--color-text);
+    border: 1px solid transparent;
+}
+.participant-form label{
+    color: gray;
+}
+.delete-part{
+    background-color: red;
+    border-radius: 10px;
+    border: none;
+    padding: 5px 40px;
+    color: white;
+
+}
+.delete-part:hover{
+    background-color: rgb(194, 12, 12);
+}
+#participant-list {
+        text-align: cenetr;
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.participant-item{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+        background-color: var(--color-nvf);
+        padding: 5px;
+        border-radius: 10px;
+
+}
+
+
+
