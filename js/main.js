@@ -66,6 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (Number(el.dataset.step) === stepNum) el.classList.add('active'); else el.classList.remove('active');
         });
         if (stepNum === 2) populateStep2();
+        if (stepNum === 3) populateStep3();
         saveProgress();
       }
 
@@ -177,7 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
         state.qty = qty;
         state.participants = [];
         saveProgress();
-        populateParticipantsForm();
+        populateStep3();
         showStep(3);
       });
 
@@ -225,6 +226,152 @@ document.addEventListener('DOMContentLoaded', () => {
           qtyInput.value = v;
         });
       }
+
+
+
+      //etapes 3 
+
+      function populateStep3() {
+        if (!state.selectedEvent || !state.qty) return;
+
+        const form = document.getElementById("participants-form");
+        const counter = document.getElementById("participant-counter");
+        const resultsContainer = document.getElementById("participant-list");
+
+        let participants = Array.isArray(state.participants)
+          ? state.participants.slice()
+          : [];
+
+        for (let i = 0; i < state.qty; i++) {
+          if (!participants[i] || typeof participants[i] !== "object") {
+            participants[i] = { first: "", last: "", mail: "", phone: "" };
+          }
+        }
+
+        let currentIndex = 0;
+
+        function getFormValues() {
+          return {
+            first: form.querySelector("#firstName").value.trim(),
+            last: form.querySelector("#lastName").value.trim(),
+            mail: form.querySelector("#email").value.trim(),
+            phone: form.querySelector("#phone").value.trim(),
+          };
+        }
+
+        function isComplete({ first, last, mail, phone }) {
+          return first && last && mail && phone;
+        }
+
+        function updateParticipants() {
+          state.participants = participants.slice();
+          saveProgress();
+          renderParticipantsList();
+        }
+
+        function renderParticipantsList() {
+          if (!resultsContainer) return;
+
+          const items = participants
+            .map((p, i) => {
+              if (!isComplete(p)) return "";
+              return `
+          <div class="participant-item" data-index="${i}">
+            <span>${p.first} ${p.last} — ${p.mail} ${p.phone ? "(" + p.phone + ")" : ""}</span>
+            <button class="delete-part" data-index="${i}">Supprimer</button>
+          </div>`;
+            })
+            .filter(Boolean)
+            .join("");
+
+          resultsContainer.innerHTML = items || `<p>Aucun participant ajouté</p>`;
+
+          resultsContainer.querySelectorAll(".delete-part").forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+              const idx = Number(e.currentTarget.dataset.index);
+              participants[idx] = { first: "", last: "", mail: "", phone: "" };
+              updateParticipants();
+              renderForm(currentIndex);
+            });
+          });
+        }
+
+        function renderForm(index) {
+          const p = participants[index] || { first: "", last: "", mail: "", phone: "" };
+
+          form.innerHTML = `
+            <div class="participant-form">
+              <label>Participant ${index + 1} / ${state.qty}</label>
+              <input type="text" id="firstName" placeholder="Prénom" value="${p.first}" />
+              <input type="text" id="lastName" placeholder="Nom" value="${p.last}" />
+              <input type="email" id="email" placeholder="Email" value="${p.mail}" />
+              <input type="tel" id="phone" placeholder="Téléphone" value="${p.phone}" />
+              <div id="error-remplir" style="color:red"></div>
+              <input id="ajouter_par" type="button" value="Ajouter Participant" />
+            </div>
+          `;
+
+          counter.textContent = `Participant ${index + 1} / ${state.qty}`;
+
+          const addBtn = document.getElementById("ajouter_par");
+
+          addBtn.onclick = () => {
+            const values = getFormValues();
+
+            if (!isComplete(values)) {
+              error_messages("#error-remplir","Veuillez remplir tous les champs avant d'ajouter le participant.");
+              return;
+            }
+
+            participants[index] = values;
+            updateParticipants();
+
+            const nextIndex = participants.findIndex((p) => !isComplete(p));
+            currentIndex = nextIndex !== -1 ? nextIndex : index;
+            renderForm(currentIndex);
+          };
+        }
+
+        function saveCurrentParticipant() {
+          const values = getFormValues();
+          if (!isComplete(values)) {
+            error_messages("#error-remplir","Veuillez compléter tous les participants avant de continuer");
+            return false;
+          }
+
+          participants[currentIndex] = values;
+          updateParticipants();
+          return true;
+        }
+
+        document.getElementById("step3-prev").onclick = () => {
+          if (currentIndex > 0) {
+            saveCurrentParticipant();
+            currentIndex--;
+            renderForm(currentIndex);
+          } else {
+            showStep(2);
+          }
+        };
+
+        document.getElementById("step3-next").onclick = () => {
+          if (!saveCurrentParticipant()) return;
+
+          const incomplete = participants.some((p) => !isComplete(p));
+          if (incomplete) {
+            error_messages("#error-remplir","Veuillez compléter tous les participants avant de continuer");
+            return;
+          }
+
+          saveProgress();
+          showStep(4);
+        };
+
+        renderForm(currentIndex);
+        renderParticipantsList();
+      }
+
+
 
       showStep(state.currentStep);
 
