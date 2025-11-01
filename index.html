@@ -40,7 +40,7 @@
                         <div id="price"><span class="num_price"></span></div>
                     </div>
                     <div class="quantite">
-                        
+
                         <label for="qty-input">Quantité</label>
                         <div class="qn-arrow">
                             <i class="fa-solid fa-minus " id="minus"></i>
@@ -64,9 +64,13 @@
         </section>
         <section class="step step-3 step-section hidden" data-step="3">
             <div>
-                <h2>Ajouter les participants</h2>
-                <p id="participant-counter">Participant 1 / 1</p>
+                <h2 id="participant-counter">Participant 1 / 1</h2>
                 <form id="participants-form"></form>
+            </div>
+            <div class="resulta_particpant">
+                <h2>Participants</h2>
+                <!-- new container to show added participants -->
+                <div id="participant-list"></div>
                 <div style="margin-top:12px;">
                     <button type="button" id="step3-prev">Précédent</button>
                     <button type="button" id="step3-next">Suivant</button>
