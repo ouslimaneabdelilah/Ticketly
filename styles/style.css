@@ -570,6 +570,15 @@
 }
 .confirm-modal #modal-cancel { background: #ef4444; color: #fff; }
 .confirm-modal #modal-confirm { background: var(--color-btn-primary); color: #fff; }
+.step-4{
+            text-align: center;
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+#step4-prev{
+    background-color: var(--color-accent);
+}
 
 @media (max-width: 640px) {
     .confirm-modal { padding: 14px; max-width: 360px; }
@@ -577,4 +586,14 @@
     .ticket-actions button { width: 100%; padding: 10px; }
     .step-4 .event-list .event-body { padding: 0 6px; }
     .list-parts { grid-template-columns: 1fr; }
+    .content-ticket{
+        display: grid;
+        grid-template-columns: 1fr;
+
+    }
+    .line{
+        margin: auto;
+        height: 4px;
+        width: 250px;
+    }
 }
