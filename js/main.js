@@ -67,6 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         if (stepNum === 2) populateStep2();
         if (stepNum === 3) populateStep3();
+        if (stepNum === 4) populateStep4();  
         saveProgress();
       }
 
@@ -319,7 +320,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const values = getFormValues();
 
             if (!isComplete(values)) {
-              error_messages("#error-remplir","Veuillez remplir tous les champs avant d'ajouter le participant.");
+              error_messages("#error-remplir", "Veuillez remplir tous les champs avant d'ajouter le participant.");
               return;
             }
 
@@ -335,7 +336,7 @@ document.addEventListener('DOMContentLoaded', () => {
         function saveCurrentParticipant() {
           const values = getFormValues();
           if (!isComplete(values)) {
-            error_messages("#error-remplir","Veuillez compléter tous les participants avant de continuer");
+            error_messages("#error-remplir", "Veuillez compléter tous les participants avant de continuer");
             return false;
           }
 
@@ -359,7 +360,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
           const incomplete = participants.some((p) => !isComplete(p));
           if (incomplete) {
-            error_messages("#error-remplir","Veuillez compléter tous les participants avant de continuer");
+            error_messages("#error-remplir", "Veuillez compléter tous les participants avant de continuer");
             return;
           }
 
@@ -369,9 +370,119 @@ document.addEventListener('DOMContentLoaded', () => {
 
         renderForm(currentIndex);
         renderParticipantsList();
+        
       }
 
+      function populateStep4() {
+        if (!state.selectedEvent) return;
+        const eventList = document.querySelector(".event-list");
+        const partsList = document.querySelector(".list-parts");
+        const section4 = document.querySelector('.step-4');
 
+        if (eventList) eventList.innerHTML = '';
+        if (partsList) partsList.innerHTML = '';
+
+        const qty = Array.isArray(state.participants) && state.participants.length > 0
+          ? state.participants.length
+          : Number(state.qty) || 0;
+
+        const priceNum = Number(state.selectedEvent.price) || 0;
+        const total = priceNum * qty;
+        const currency = state.selectedEvent.currency || '';
+
+        if (eventList) {
+          eventList.innerHTML = `
+            <div class="event-body">
+              <div class="event-img">
+                <img src="${state.selectedEvent.image}" alt="${state.selectedEvent.title}" />
+              </div>
+              <h3 class="event-title">${state.selectedEvent.title}</h3>
+              <p class="event-meta">${state.selectedEvent.date} <i class="fa-solid fa-location-dot"></i> ${state.selectedEvent.location}</p>
+              <p class="event-type">${state.selectedEvent.type}</p>
+              <p class="number-billets">Nombre de billets: ${qty}</p>
+              <p class="event-total">Total: <strong>${total} ${currency}</strong></p>
+            </div>
+          `;
+        }
+
+        if (partsList) {
+          if (!state.participants || state.participants.length === 0) {
+            partsList.innerHTML = `<p>Aucun participant renseigné.</p>`;
+          } else {
+            partsList.innerHTML = state.participants.map((p, i) => `
+              <div class="participant-ticket participant-${i+1}">
+                <p><strong>Participant ${i+1}</strong></p>
+                <p>Prénom: ${p.first}</p>
+                <p>Nom: ${p.last}</p>
+                <p>Email: ${p.mail}</p>
+                <p>Téléphone: ${p.phone}</p>
+              </div>
+            `).join('');
+          }
+        }
+
+        let existingActions = section4.querySelector('.ticket-actions');
+        if (existingActions) existingActions.remove();
+
+        const actions = document.createElement('div');
+        actions.className = 'ticket-actions';
+
+        const prevBtn = document.createElement('button');
+        prevBtn.type = 'button';
+        prevBtn.id = 'step4-prev';
+        prevBtn.textContent = 'Précédent';
+
+        const confirmBtn = document.createElement('button');
+        confirmBtn.type = 'button';
+        confirmBtn.id = 'step4-confirm';
+        confirmBtn.textContent = 'Confirmer';
+
+        actions.appendChild(prevBtn);
+        actions.appendChild(confirmBtn);
+        section4.appendChild(actions);
+
+        prevBtn.addEventListener('click', () => showStep(3));
+        confirmBtn.addEventListener('click', () => showConfirmModal());
+      }
+
+      function showConfirmModal() {
+        const overlay = document.createElement('div');
+        overlay.className = 'confirm-overlay';
+
+        const modal = document.createElement('div');
+        modal.className = 'confirm-modal';
+
+        modal.innerHTML = `
+          <h3>Confirmer la réservation</h3>
+          <p>Voulez-vous confirmer votre réservation pour <strong>${state.selectedEvent ? state.selectedEvent.title : ''}</strong> ?</p>
+          <div class="confirm-actions">
+            <button id="modal-cancel">Annuler</button>
+            <button id="modal-confirm">Confirmer</button>
+          </div>
+        `;
+
+        overlay.appendChild(modal);
+        document.body.appendChild(overlay);
+
+        overlay.querySelector('#modal-cancel').addEventListener('click', () => {
+          overlay.remove();
+        });
+
+        overlay.querySelector('#modal-confirm').addEventListener('click', () => {
+          localStorage.removeItem('reserv_progress');
+          overlay.querySelector('#modal-confirm').disabled = true;
+          overlay.querySelector('#modal-confirm').textContent = 'Confirmé';
+          setTimeout(() => {
+            overlay.remove();
+            alert('Réservation confirmée. Merci!');
+            state.selectedEvent = null;
+            state.qty = 0;
+            state.participants = [];
+            showStep(1);
+            displayCards(state.data.cards);
+          }, 600);
+        });
+      }
 
       showStep(state.currentStep);
 

@@ -271,9 +271,9 @@
     background-color: var(--color-btn-progress);
     width: 100%;
     max-width: 960px;
-    /* display: grid;
+    display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px; */
+    gap: 10px;
     border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 12px;
     padding: 20px;
@@ -467,4 +467,114 @@
     height: 300px;
     width: 3px;
     background-color: var(--color-nvf);
+}
+/* step 4  */
+.confirm-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 20px;
+}
+
+.confirm-modal {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 420px;
+    width: 100%;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    text-align: center;
+    color: #000;
+}
+
+.confirm-modal .confirm-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 16px;
+}
+
+.ticket-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.ticket-actions button {
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: transform .12s ease, box-shadow .12s ease, opacity .12s ease;
+}
+
+#step4-prev {
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    color: var(--color-text, #111827);
+}
+#step4-prev:hover { transform: translateY(-2px); }
+
+#step4-confirm {
+    background: var(--color-btn-primary);
+    color: #fff;
+    border: none;
+}
+#step4-confirm:hover { opacity: 0.95; transform: translateY(-2px); }
+
+.step-4 .event-list .event-body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    text-align: center;
+}
+.step-4 .event-list .event-img {
+    width: 100%;
+    max-width: 280px;
+}
+.step-4 .event-list .event-title { margin: 0; font-size: 1.1rem; font-weight: 700; }
+.step-4 .event-list .event-meta,
+.step-4 .event-list .event-type,
+.step-4 .event-list .number-billets,
+.step-4 .event-list .event-total {
+    margin: 2px 0;
+    color: var(--color-nvf);
+}
+
+.list-parts {
+    display: grid;
+    gap: 10px;
+    align-items: start;
+}
+.participant-ticket {
+    background: var(--color-btn-progress);
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(0,0,0,0.06);
+}
+.participant-ticket p { margin: 4px 0; color: var(--color-nvf); }
+
+.confirm-modal button {
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+    min-width: 96px;
+}
+.confirm-modal #modal-cancel { background: #ef4444; color: #fff; }
+.confirm-modal #modal-confirm { background: var(--color-btn-primary); color: #fff; }
+
+@media (max-width: 640px) {
+    .confirm-modal { padding: 14px; max-width: 360px; }
+    .ticket-actions { gap: 8px; }
+    .ticket-actions button { width: 100%; padding: 10px; }
+    .step-4 .event-list .event-body { padding: 0 6px; }
+    .list-parts { grid-template-columns: 1fr; }
 }
